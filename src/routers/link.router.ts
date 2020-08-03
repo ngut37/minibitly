@@ -1,30 +1,39 @@
-import { Router, Response, NextFunction } from 'express';
+import { Router } from 'express';
+import { Links } from '../models/link.model';
 
 export const linkRouter: Router = Router();
 
-const mockedDb: Array<{
-    id: string;
-    url: string;
-}> = [
-    {
-        id: 'github',
-        url: 'https://github.com/ngut37',
-    },
-    {
-        id: 'linkedin',
-        url: 'https://www.linkedin.com/in/trung-thu-nguyen-0103061b0/',
-    },
-];
-
-linkRouter.param('id', (req: any, res, next, id: string) => {
-    const url = mockedDb.find((element) => element.id === id)?.url;
-    if (!url) {
-        return res.status(404).send(`Link - ${id} - not found.`);
+linkRouter.param('name', async (req: any, res, next, name: string) => {
+    const link = await Links.findOne({ name });
+    if (!link) {
+        return res.status(404).send(`Link - ${name} - not found.`);
     }
-    req.redirectTo = url;
-    next();
+    req.link = link;
+    return next();
 });
 
-linkRouter.get('/:id', (req: any, res) => {
-    return res.redirect(req.redirectTo);
+linkRouter.get('/:name', (req: any, res) => {
+    return res.redirect(req.link.url);
 });
+
+linkRouter.post('/', async (req, res) => {
+    let { name, url } = req.body;
+    url = modifyUrl(url);
+    const link = new Links();
+    link.name = name;
+    link.url = url;
+    try {
+        await link.save();
+        return res.status(201).send(link);
+    } catch (e) {
+        return res.status(500).send(e.message);
+    }
+});
+
+const modifyUrl = (url: string): string => {
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+        return url;
+    } else {
+        return 'http://' + url;
+    }
+};
