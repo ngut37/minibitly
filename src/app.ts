@@ -1,21 +1,21 @@
 import express from 'express';
 import mongoose from 'mongoose';
-require('dotenv/config');
-
-import { linkRouter } from './routers/link.router';
 import bodyParser from 'body-parser';
 
+import { config } from './config/config';
+import { linkRouter } from './routers/link.router';
+
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
 app.use('/links', linkRouter);
 
-mongoose.connect(
-    process.env.MONGO_DB!,
-    { useNewUrlParser: true, useUnifiedTopology: true },
-    () => console.log('Connected to DB.')
-);
+mongoose.connect(config.MONGO_DB!, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
 
-app.listen(PORT, () => console.log(`Server is listening on port: ${PORT}`));
+app.listen(config.PORT, () =>
+    console.log(`Server is listening on port: ${config.PORT}`)
+);
