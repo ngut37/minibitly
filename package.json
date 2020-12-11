@@ -2,11 +2,14 @@
     "name": "my-bitly",
     "version": "1.0.0",
     "description": "",
+    "engines": {
+        "node": "12.x"
+      },
     "main": "app.js",
     "scripts": {
         "start": "node dist/app.js",
         "dev": "nodemon src/app.ts",
-        "build": "tsc -p"
+        "build": "tsc -p ."
     },
     "author": "",
     "license": "ISC",
