@@ -1,13 +1,18 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
+import cors from "cors";
 
 import { config } from './config/config';
 import { linkRouter, pathRouter, redirectRouter } from './controllers';
 
 const app = express();
 
+const corsOpts = cors();
+
+app.use(corsOpts);
 app.use(bodyParser.json());
+
 
 app.use('/paths', pathRouter);
 app.use('/links', linkRouter);
