@@ -13,7 +13,7 @@ type RequestParams = {
   name: string;
 };
 
-getRouter.get('/:name', async (req, res) => {
+getRouter.post('/:name', async (req, res) => {
   const { password } = req.body as RequestBody;
   const { name } = req.params as RequestParams;
 
