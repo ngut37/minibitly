@@ -1,9 +1,9 @@
 {
     "name": "my-bitly",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "",
     "engines": {
-        "node": "12.x"
+        "node": "14.x"
     },
     "main": "app.js",
     "scripts": {
